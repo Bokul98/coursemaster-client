@@ -1,22 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Login = () => {
+    const [serverError, setServerError] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
+
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
-        console.log("Login Data:", data);
-        // later: call API
+    const onSubmit = async (data) => {
+        setServerError("");
+        setSuccessMsg("");
+
+        try {
+            const response = await fetch("http://localhost:5000/auth/signin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include", // important for refreshToken cookies
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                setServerError(result.error || "Invalid email or password");
+                return;
+            }
+
+            // SUCCESS — Store access token
+            localStorage.setItem("accessToken", result.accessToken);
+
+            setSuccessMsg("Login successful!");
+            console.log("User logged in:", result);
+
+            // optional: redirect
+            // window.location.href = "/dashboard";
+
+        } catch (error) {
+            setServerError("Something went wrong. Please try again." + (error.message ? ` Error: ${error.message}` : ""));
+        }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
             <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
+
+            {/* Server Errors */}
+            {serverError && (
+                <p className="text-red-500 text-sm">{serverError}</p>
+            )}
+            {successMsg && (
+                <p className="text-green-600 text-sm">{successMsg}</p>
+            )}
 
             {/* Email */}
             <div className="flex flex-col">

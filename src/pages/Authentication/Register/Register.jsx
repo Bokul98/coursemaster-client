@@ -1,15 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Register = () => {
+    const [serverError, setServerError] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
+
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
-        console.log("Register Data:", data);
+    const onSubmit = async (data) => {
+        setServerError("");
+        setSuccessMsg("");
+
+        // Password match check
+        if (data.password !== data.confirmPassword) {
+            setServerError("Passwords do not match");
+            return;
+        }
+
+        const payload = {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            password: data.password,
+        };
+
+        try {
+            const res = await fetch("http://localhost:5000/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                setServerError(result.error || "Registration failed");
+                return;
+            }
+
+            setSuccessMsg("Account created successfully!");
+        } catch (error) {
+            setServerError("Something went wrong. Try again!");
+        }
     };
 
     return (
@@ -19,7 +58,11 @@ const Register = () => {
         >
             <h2 className="text-2xl font-bold text-center mb-4">Create Account</h2>
 
-            {/* Name */}
+            {/* Server Messages */}
+            {serverError && <p className="text-red-500 text-sm">{serverError}</p>}
+            {successMsg && <p className="text-green-600 text-sm">{successMsg}</p>}
+
+            {/* Full Name */}
             <div className="flex flex-col">
                 <label className="text-sm font-medium mb-1">Full Name</label>
                 <input
@@ -42,6 +85,19 @@ const Register = () => {
                 />
                 {errors.email && (
                     <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                )}
+            </div>
+
+            {/* Phone */}
+            <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">Phone Number</label>
+                <input
+                    type="text"
+                    className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    {...register("phone", { required: "Phone number is required" })}
+                />
+                {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
                 )}
             </div>
 
@@ -71,7 +127,7 @@ const Register = () => {
                     type="password"
                     className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     {...register("confirmPassword", {
-                        required: "Confirm your password",
+                        required: "Please confirm your password",
                     })}
                 />
                 {errors.confirmPassword && (
