@@ -46,8 +46,10 @@ const Login = () => {
             setSuccessMsg("Login successful!");
             console.log("User logged in:", result);
 
-            // redirect to home
-            navigate('/');
+            // redirect to role-appropriate dashboard
+            const role = result.role || localStorage.getItem('userRole') || 'student';
+            if (role === 'admin') navigate('/admin');
+            else navigate('/student');
 
         } catch (error) {
             setServerError("Something went wrong. Please try again." + (error.message ? ` Error: ${error.message}` : ""));

@@ -18,7 +18,9 @@ const StudentDashboard = () => {
       <div className="bg-gradient-to-r from-[#eef2ff] to-[#f0f9ff] rounded-2xl p-8 mb-8 shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
-            <img src={Logo} alt="Logo" className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+            <Link to="/">
+              <img src={Logo} alt="Logo" className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+            </Link>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0D3056]">Welcome back, {userName}</h1>

@@ -1,4 +1,5 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import React from 'react';
 import RootLayout from "../layouts/RootLayout";
 import Home from "../pages/Home/Home/Home";
 import AuthLayout from "../layouts/AuthLayout";
@@ -37,11 +38,22 @@ export const router = createBrowserRouter([
   },
   {
     path: "/student",
-    Component: StudentDashboard
+    Component: () => {
+      const role = localStorage.getItem('userRole') || null;
+      if (!localStorage.getItem('accessToken')) return <Navigate to="/login" replace />;
+      // if admin accidentally navigates to /student, send to admin dashboard
+      if (role === 'admin') return <Navigate to="/admin" replace />;
+      return <StudentDashboard />;
+    }
   },
   {
     path: "/admin",
-    Component: AdminDashboard
+    Component: () => {
+      const role = localStorage.getItem('userRole') || null;
+      if (!localStorage.getItem('accessToken')) return <Navigate to="/login" replace />;
+      if (role !== 'admin') return <Navigate to="/student" replace />;
+      return <AdminDashboard />;
+    }
   },
   {
     path: "/admin/courses",

@@ -63,7 +63,9 @@ const Register = () => {
                     localStorage.setItem('userRole', signinResult.role || 'student');
                     localStorage.setItem('userName', signinResult.name || '');
                     window.dispatchEvent(new Event('authChange'));
-                    navigate('/');
+                    const role = signinResult.role || localStorage.getItem('userRole') || 'student';
+                    if (role === 'admin') navigate('/admin');
+                    else navigate('/student');
                 } else {
                     // fallback: redirect to login
                     navigate('/login');
