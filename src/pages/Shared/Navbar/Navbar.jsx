@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import isAuthenticated from '../../../utils/auth';
+import LogoPng from '/src/assets/Logo.png';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
@@ -33,8 +34,8 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                 
                 {/* Logo Section */}
-                <Link to="/">
-                    <img src="/src/assets/Logo.png" alt="CourseMaster Logo" className="w-40 cursor-pointer" />
+                <Link to="/" className="flex items-center gap-3">
+                    <img src={LogoPng} alt="CourseMaster Logo" className="w-40 cursor-pointer" />
                 </Link>
 
                 {/* Desktop Menu */}
@@ -95,20 +96,20 @@ const Navbar = () => {
                     >
                         Courses
                     </Link>
-                    <Link 
-                        to="/login" 
-                        className="block px-6 py-3 hover:bg-gray-100 font-medium"
-                        onClick={() => setOpen(false)}
-                    >
-                        Login
-                    </Link>
-                    <Link 
-                        to="/register" 
-                        className="block px-6 py-3 hover:bg-gray-100 font-medium"
-                        onClick={() => setOpen(false)}
-                    >
-                        Register
-                    </Link>
+
+                    {!auth && (
+                        <>
+                            <Link to="/login" className="block px-6 py-3 hover:bg-gray-100 font-medium" onClick={() => setOpen(false)}>Login</Link>
+                            <Link to="/register" className="block px-6 py-3 hover:bg-gray-100 font-medium" onClick={() => setOpen(false)}>Register</Link>
+                        </>
+                    )}
+
+                    {auth && (
+                        <>
+                            <Link to="/student" className="block px-6 py-3 hover:bg-gray-100 font-medium" onClick={() => setOpen(false)}>Dashboard</Link>
+                            <button onClick={() => { setOpen(false); localStorage.removeItem('accessToken'); localStorage.removeItem('userRole'); localStorage.removeItem('userName'); window.dispatchEvent(new Event('authChange')); navigate('/'); }} className="w-full text-left px-6 py-3 hover:bg-gray-100 font-medium">Logout</button>
+                        </>
+                    )}
                 </div>
             )}
         </nav>

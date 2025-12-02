@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
 
+// sample quizzes keyed by courseId -> moduleId could be extended
 const sampleQuizzes = {
-  1: [
-    {
-      id: 'q1',
-      question: 'What is React primarily used for?',
-      options: ['Styling', 'Backend APIs', 'Building user interfaces', 'Database'],
-      answer: 2
-    },
-    {
-      id: 'q2',
-      question: 'Which hook is used for state?',
-      options: ['useEffect', 'useState', 'useMemo', 'useRef'],
-      answer: 1
-    }
-  ]
+  1: {
+    default: [
+      {
+        id: 'q1',
+        question: 'What is React primarily used for?',
+        options: ['Styling', 'Backend APIs', 'Building user interfaces', 'Database'],
+        answer: 2
+      },
+      {
+        id: 'q2',
+        question: 'Which hook is used for state?',
+        options: ['useEffect', 'useState', 'useMemo', 'useRef'],
+        answer: 1
+      }
+    ]
+  }
 };
 
-const Quiz = ({ courseId }) => {
-  const quiz = sampleQuizzes[courseId] || [];
+// Props: courseId (required), moduleId (optional)
+const Quiz = ({ courseId, moduleId = 'default' }) => {
+  const quiz = (sampleQuizzes[courseId] && sampleQuizzes[courseId][moduleId]) || [];
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
 
@@ -32,10 +36,17 @@ const Quiz = ({ courseId }) => {
     quiz.forEach(q => {
       if (answers[q.id] === q.answer) correct += 1;
     });
-    setScore({ correct, total: quiz.length });
+    const result = { correct, total: quiz.length, answers, submittedAt: new Date().toISOString() };
+    setScore(result);
+
+    // persist quiz submission per-course+module for review
+    const key = `quiz_submissions_${courseId}_${moduleId}`;
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    arr.push({ id: Date.now(), ...result });
+    localStorage.setItem(key, JSON.stringify(arr));
   };
 
-  if (quiz.length === 0) return <div />;
+  if (quiz.length === 0) return <div className="text-sm text-gray-500">No quiz available for this module.</div>;
 
   return (
     <div>

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
-const Assignment = ({ courseId }) => {
+// Props: courseId (required), moduleId (optional)
+const Assignment = ({ courseId, moduleId = 'default' }) => {
   const [value, setValue] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Save assignment locally for demo
-    const key = `assignments_${courseId}`;
+    // Save assignment locally for demo (per-course + per-module)
+    const key = `assignments_${courseId}_${moduleId}`;
     const arr = JSON.parse(localStorage.getItem(key) || '[]');
     arr.push({ id: Date.now(), value, submittedAt: new Date().toISOString() });
     localStorage.setItem(key, JSON.stringify(arr));
