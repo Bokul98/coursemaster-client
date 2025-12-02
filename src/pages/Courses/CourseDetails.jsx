@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../../utils/auth";
 
 const CourseDetails = () => {
@@ -32,9 +32,14 @@ const CourseDetails = () => {
             return;
         }
 
-        // Minimal behavior for now: proceed to enrollment/payment flow (not implemented)
-        // You can replace this with a real flow later.
-        alert('Proceed to enrollment / payment flow (not implemented)');
+        // Persist enrollment locally (simple demo)
+        const enrolled = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+        if (!enrolled.find(c => c.id === course.id)) {
+            enrolled.push({ id: course.id, title: course.title, progress: 0 });
+            localStorage.setItem('enrolledCourses', JSON.stringify(enrolled));
+        }
+        // Navigate to student dashboard
+        navigate('/student');
     };
 
     return (

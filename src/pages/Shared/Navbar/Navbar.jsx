@@ -1,8 +1,32 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import isAuthenticated from '../../../utils/auth';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
+
+    const [role, setRole] = useState(null);
+    const [auth, setAuth] = useState(isAuthenticated());
+    const [userName, setUserName] = useState('');
+    const navigate = useNavigate();
+
+    const refreshAuth = () => {
+        setAuth(isAuthenticated());
+        setRole(localStorage.getItem('userRole'));
+        setUserName(localStorage.getItem('userName') || '');
+    };
+
+    useEffect(() => {
+        refreshAuth();
+        // listen for auth changes (login/logout)
+        const onAuthChange = () => refreshAuth();
+        window.addEventListener('authChange', onAuthChange);
+        window.addEventListener('storage', onAuthChange);
+        return () => {
+            window.removeEventListener('authChange', onAuthChange);
+            window.removeEventListener('storage', onAuthChange);
+        };
+    }, []);
 
     return (
         <nav className="w-full shadow-md bg-white sticky top-0 z-50">
@@ -17,8 +41,29 @@ const Navbar = () => {
                 <div className="hidden md:flex items-center gap-8">
                     <Link to="/" className="hover:text-blue-600 font-medium transition-colors">Home</Link>
                     <Link to="/courses" className="hover:text-blue-600 font-medium transition-colors">Courses</Link>
-                    <Link to="/login" className="hover:text-blue-600 font-medium transition-colors">Login</Link>
-                    <Link to="/register" className="hover:text-blue-600 font-medium transition-colors">Register</Link>
+                    {!auth && (
+                        <>
+                            <Link to="/login" className="hover:text-blue-600 font-medium transition-colors">Login</Link>
+                            <Link to="/register" className="hover:text-blue-600 font-medium transition-colors">Register</Link>
+                        </>
+                    )}
+
+                    {auth && (
+                        <>
+                            <Link to="/student" className="hover:text-blue-600 font-medium transition-colors">Dashboard</Link>
+                            <button onClick={() => {
+                                localStorage.removeItem('accessToken');
+                                localStorage.removeItem('userRole');
+                                localStorage.removeItem('userName');
+                                window.dispatchEvent(new Event('authChange'));
+                                navigate('/');
+                            }} className="hover:text-blue-600 font-medium transition-colors">Logout</button>
+                        </>
+                    )}
+
+                    {role === 'admin' && (
+                        <Link to="/admin" className="hover:text-blue-600 font-medium transition-colors">Admin</Link>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}

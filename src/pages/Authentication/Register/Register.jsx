@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
 const Register = () => {
@@ -10,6 +11,8 @@ const Register = () => {
         handleSubmit,
         formState: { errors },
     } = useForm();
+
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         setServerError("");
@@ -45,6 +48,29 @@ const Register = () => {
             }
 
             setSuccessMsg("Account created successfully!");
+            // auto-login after successful signup
+            try {
+                const signinRes = await fetch("http://localhost:5000/auth/signin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ email: data.email, password: data.password })
+                });
+
+                const signinResult = await signinRes.json();
+                if (signinRes.ok) {
+                    localStorage.setItem('accessToken', signinResult.accessToken);
+                    localStorage.setItem('userRole', signinResult.role || 'student');
+                    localStorage.setItem('userName', signinResult.name || '');
+                    window.dispatchEvent(new Event('authChange'));
+                    navigate('/');
+                } else {
+                    // fallback: redirect to login
+                    navigate('/login');
+                }
+            } catch (e) {
+                navigate('/login');
+            }
         } catch (err) {
             setServerError(err?.message || "Something went wrong. Try again!");
         }

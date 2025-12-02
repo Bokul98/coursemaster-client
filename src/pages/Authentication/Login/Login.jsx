@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
 const Login = () => {
@@ -10,6 +11,8 @@ const Login = () => {
         handleSubmit,
         formState: { errors },
     } = useForm();
+
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         setServerError("");
@@ -34,12 +37,17 @@ const Login = () => {
 
             // SUCCESS — Store access token
             localStorage.setItem("accessToken", result.accessToken);
+            localStorage.setItem("userRole", result.role || 'student');
+            localStorage.setItem("userName", result.name || '');
+
+            // notify app about auth change
+            window.dispatchEvent(new Event('authChange'));
 
             setSuccessMsg("Login successful!");
             console.log("User logged in:", result);
 
-            // optional: redirect
-            // window.location.href = "/dashboard";
+            // redirect to home
+            navigate('/');
 
         } catch (error) {
             setServerError("Something went wrong. Please try again." + (error.message ? ` Error: ${error.message}` : ""));
