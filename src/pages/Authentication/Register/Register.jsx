@@ -8,7 +8,6 @@ const Register = () => {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm();
 
@@ -46,8 +45,8 @@ const Register = () => {
             }
 
             setSuccessMsg("Account created successfully!");
-        } catch (error) {
-            setServerError("Something went wrong. Try again!");
+        } catch (err) {
+            setServerError(err?.message || "Something went wrong. Try again!");
         }
     };
 
