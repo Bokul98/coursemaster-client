@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 // sample quizzes keyed by courseId -> moduleId could be extended
 const sampleQuizzes = {
@@ -20,17 +21,23 @@ const sampleQuizzes = {
   }
 };
 
-// Props: courseId (required), moduleId (optional)
-const Quiz = ({ courseId, moduleId = 'default' }) => {
+// Props: courseId (optional), moduleId (optional)
+const Quiz = (props) => {
+  const params = useParams();
+  const navigate = useNavigate();
+  const courseId = props.courseId || params.id;
+  const moduleId = props.moduleId || params.lessonIndex || 'default';
+
   const quiz = (sampleQuizzes[courseId] && sampleQuizzes[courseId][moduleId]) || [];
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const handleChange = (qid, idx) => {
     setAnswers({ ...answers, [qid]: idx });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let correct = 0;
     quiz.forEach(q => {
@@ -39,11 +46,33 @@ const Quiz = ({ courseId, moduleId = 'default' }) => {
     const result = { correct, total: quiz.length, answers, submittedAt: new Date().toISOString() };
     setScore(result);
 
-    // persist quiz submission per-course+module for review
-    const key = `quiz_submissions_${courseId}_${moduleId}`;
-    const arr = JSON.parse(localStorage.getItem(key) || '[]');
-    arr.push({ id: Date.now(), ...result });
-    localStorage.setItem(key, JSON.stringify(arr));
+    // Try to send to server
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      const key = `quiz_submissions_${courseId}_${moduleId}`;
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push({ id: Date.now(), ...result });
+      localStorage.setItem(key, JSON.stringify(arr));
+      setMessage('Saved locally (not logged in)');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:5000/student/quizzes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ courseId, score: result.correct, total: result.total, moduleId: moduleId || null, lessonId: moduleId || null })
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error || 'Submission failed');
+      setMessage('Submitted to server');
+    } catch (err) {
+      const key = `quiz_submissions_${courseId}_${moduleId}`;
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push({ id: Date.now(), ...result, offline: true });
+      localStorage.setItem(key, JSON.stringify(arr));
+      setMessage('Saved locally (server error)');
+    }
   };
 
   if (quiz.length === 0) return <div className="text-sm text-gray-500">No quiz available for this module.</div>;
@@ -52,7 +81,10 @@ const Quiz = ({ courseId, moduleId = 'default' }) => {
     <div>
       <h4 className="font-semibold mb-2">Quiz</h4>
       {score ? (
-        <div className="text-sm text-green-600">You scored {score.correct} / {score.total}</div>
+        <div>
+          <div className="text-sm text-green-600">You scored {score.correct} / {score.total}</div>
+          {message && <div className="text-sm text-gray-600">{message}</div>}
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {quiz.map(q => (

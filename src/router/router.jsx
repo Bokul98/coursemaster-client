@@ -9,6 +9,9 @@ import Courses from "../pages/Courses/Courses";
 import CourseDetails from "../pages/Courses/CourseDetails";
 import StudentDashboard from "../pages/Student/StudentDashboard";
 import CoursePlayer from "../pages/Courses/CoursePlayer";
+import Assignment from "../pages/Courses/Assignment";
+import Quiz from "../pages/Courses/Quiz";
+import AdminLayout from "../layouts/AdminLayout";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 import AdminCourses from "../pages/Admin/AdminCourses";
 import AdminCourseForm from "../pages/Admin/AdminCourseForm";
@@ -52,36 +55,29 @@ export const router = createBrowserRouter([
       const role = localStorage.getItem('userRole') || null;
       if (!localStorage.getItem('accessToken')) return <Navigate to="/login" replace />;
       if (role !== 'admin') return <Navigate to="/student" replace />;
-      return <AdminDashboard />;
-    }
-  },
-  {
-    path: "/admin/courses",
-    Component: AdminCourses
-  },
-  {
-    path: "/admin/courses/new",
-    Component: AdminCourseForm
-  },
-  {
-    path: "/admin/courses/:id",
-    Component: AdminCourseForm
-  },
-  {
-    path: "/admin/courses/:courseId/batches",
-    Component: AdminBatches
-  },
-  {
-    path: "/admin/courses/:courseId/enrollments",
-    Component: AdminEnrollments
-  },
-  {
-    path: "/admin/courses/:courseId/assignments",
-    Component: AdminAssignments
+      return <AdminLayout />;
+    },
+    children: [
+      { index: true, Component: AdminDashboard },
+      { path: "courses", Component: AdminCourses },
+      { path: "courses/new", Component: AdminCourseForm },
+      { path: "courses/:id", Component: AdminCourseForm },
+      { path: "courses/:courseId/batches", Component: AdminBatches },
+      { path: "courses/:courseId/enrollments", Component: AdminEnrollments },
+      { path: "courses/:courseId/assignments", Component: AdminAssignments }
+    ]
   },
   {
     path: "/courses/:id/player",
     Component: CoursePlayer
+  },
+  {
+    path: "/courses/:id/player/assignment/:lessonIndex",
+    Component: Assignment
+  },
+  {
+    path: "/courses/:id/player/quiz/:lessonIndex",
+    Component: Quiz
   },
   {
     path: "/",

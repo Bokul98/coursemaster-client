@@ -1,108 +1,172 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Logo from '/src/assets/Logo.png';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+const API = "http://localhost:5000/admin";
+
+// 🔹 Reusable fetch helper
+const fetchWithAuth = async (endpoint) => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const res = await fetch(`${API}/${endpoint}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+};
+
+// 🔹 Reusable button
+const Btn = ({ to, children, className }) => (
+  <Link
+    to={to}
+    className={`inline-flex items-center px-4 py-2 rounded-md text-sm ${className}`}
+  >
+    {children}
+  </Link>
+);
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({ courses: 0, enrollments: 0, assignments: 0 });
+  const [stats, setStats] = useState({
+    courses: 0,
+    enrollments: 0,
+    assignments: 0,
+  });
+
+  const [courses, setCourses] = useState([]);
+
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const res = await fetch('http://localhost:5000/admin/stats', {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        });
-        if (!res.ok) return; // ignore
-        const data = await res.json();
-        setStats(data);
-      } catch (e) {
-        // ignore errors for now
-      }
+    const loadDashboard = async () => {
+      const s = await fetchWithAuth("stats");
+      const c = await fetchWithAuth("courses");
+
+      if (s) setStats(s);
+      setCourses(Array.isArray(c) ? c.slice(0, 6) : []);
     };
-    fetchStats();
+
+    loadDashboard();
   }, []);
 
+  const statsItems = [
+    { label: "Courses",
+      value: stats.courses,
+      link: "/admin/courses" },
+    {
+      label: "Enrollments",
+      value: stats.enrollments,
+      link: "/admin/enrollments",
+    },
+    {
+      label: "Assignments",
+      value: stats.assignments,
+      link: "/admin/assignments",
+    },
+  ];
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <header className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <Link to="/">
-            <img src={Logo} alt="Logo" className="w-28 object-contain" />
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <p className="text-sm text-gray-500">Manage courses, batches, enrollments and review student submissions.</p>
-          </div>
-        </div>
-      </header>
-
-      <main>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Link to="/admin/courses" className="block bg-white rounded-xl p-6 shadow hover:shadow-lg transition">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-500">Courses</div>
-                <div className="mt-3 text-xl font-semibold">Create & Manage</div>
-                <p className="mt-2 text-sm text-gray-500">Add, edit or remove courses and their metadata.</p>
-              </div>
-              <div className="text-3xl font-bold text-[#0D3056]">{stats.courses}</div>
-            </div>
-            <div className="mt-4">
-              <button className="px-3 py-1 bg-[#0D3056] text-white rounded">Open</button>
-            </div>
-          </Link>
-
-          <Link to="/admin/courses" className="block bg-white rounded-xl p-6 shadow hover:shadow-lg transition">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-500">Batches</div>
-                <div className="mt-3 text-xl font-semibold">Schedule & Manage</div>
-                <p className="mt-2 text-sm text-gray-500">Define course batches, start/end dates and capacity.</p>
-              </div>
-              <div className="text-3xl font-bold text-[#0D3056]">—</div>
-            </div>
-            <div className="mt-4">
-              <button className="px-3 py-1 bg-[#0D3056] text-white rounded">Open</button>
-            </div>
-          </Link>
-
-          <Link to="/admin/courses" className="block bg-white rounded-xl p-6 shadow hover:shadow-lg transition">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-500">Enrollments</div>
-                <div className="mt-3 text-xl font-semibold">View Students</div>
-                <p className="mt-2 text-sm text-gray-500">See students enrolled per course or per batch.</p>
-              </div>
-              <div className="text-3xl font-bold text-[#0D3056]">{stats.enrollments}</div>
-            </div>
-            <div className="mt-4">
-              <button className="px-3 py-1 bg-[#0D3056] text-white rounded">Open</button>
-            </div>
-          </Link>
-
-          <Link to="/admin/courses" className="block bg-white rounded-xl p-6 shadow hover:shadow-lg transition">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-500">Assignments</div>
-                <div className="mt-3 text-xl font-semibold">Review Submissions</div>
-                <p className="mt-2 text-sm text-gray-500">Review and grade student assignment submissions.</p>
-              </div>
-              <div className="text-3xl font-bold text-[#0D3056]">{stats.assignments}</div>
-            </div>
-            <div className="mt-4">
-              <button className="px-3 py-1 bg-[#0D3056] text-white rounded">Open</button>
-            </div>
-          </Link>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-500">
+            Overview — manage courses, batches, enrollments and assignments.
+          </p>
         </div>
 
-        <section className="bg-white rounded-xl p-6 shadow">
-          <h2 className="text-xl font-semibold mb-3">Quick Actions</h2>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link to="/admin/courses/new" className="inline-block px-4 py-2 bg-green-600 text-white rounded">Create Course</Link>
-            <Link to="/admin/courses" className="inline-block px-4 py-2 bg-blue-600 text-white rounded">Manage Courses</Link>
-            <Link to="/admin/courses" className="inline-block px-4 py-2 bg-indigo-600 text-white rounded">Manage Batches</Link>
+        <div className="flex items-center gap-3">
+          <Btn to="/admin/courses/new" className="bg-green-600 text-white">
+            Create Course
+          </Btn>
+          <Btn to="/admin/courses" className="bg-white border">
+            Manage Courses
+          </Btn>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {statsItems.map((item) => (
+          <Link
+            key={item.label}
+            to={item.link}
+            className="bg-white p-5 rounded-lg shadow hover:shadow-lg transition flex items-center justify-between"
+          >
+            <div>
+              <div className="text-sm text-gray-500">{item.label}</div>
+              <div className="text-2xl font-bold text-gray-900">{item.value}</div>
+            </div>
+            <div className="text-3xl">{item.icon}</div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Quick Actions + Recent Courses */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Quick Actions */}
+        <div className="bg-white rounded-lg shadow p-5">
+          <h3 className="text-lg font-semibold mb-3">Quick Actions</h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Create courses, define batches and review enrollments or assignment submissions quickly.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Btn to="/admin/courses/new" className="bg-green-600 text-white">
+              Create Course
+            </Btn>
+            <Btn to="/admin/courses" className="bg-blue-600 text-white">
+              Manage Courses
+            </Btn>
+            <Btn to="/admin/assignments" className="bg-indigo-600 text-white">
+              Review Assignments
+            </Btn>
+            <Btn to="/admin/enrollments" className="bg-gray-100 border">
+              View Enrollments
+            </Btn>
           </div>
-        </section>
-      </main>
+        </div>
+
+        {/* Recent Courses */}
+        <div className="bg-white rounded-lg shadow p-5">
+          <h3 className="text-lg font-semibold mb-3">Recent Courses</h3>
+
+          {courses.length === 0 ? (
+            <div className="text-sm text-gray-500">No courses yet.</div>
+          ) : (
+            <ul className="space-y-3">
+              {courses.map((course) => (
+                <li
+                  key={course._id}
+                  className="flex items-center justify-between"
+                >
+                  <div>
+                    <div className="font-medium text-gray-900">
+                      {course.title}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {course.instructor || "—"} • ${course.price ?? 0}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Btn
+                      to={`/admin/courses/${course._id}/batches`}
+                      className="border px-3 py-1"
+                    >
+                      Batches
+                    </Btn>
+                    <Btn
+                      to={`/admin/courses/${course._id}/enrollments`}
+                      className="border px-3 py-1"
+                    >
+                      Enrollments
+                    </Btn>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
