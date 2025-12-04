@@ -1,24 +1,40 @@
 import React from "react";
 
 const Home = () => {
+    const categories = ["Web Development", "Design", "Marketing", "Data Science"];
+    const courses = [1, 2, 3, 4];
+
+    const features = [
+        "Expert Instructors",
+        "Lifetime Access",
+        "Certification",
+        "Affordable Price",
+    ];
+
     return (
-        <div className="w-full">
+        <div className="w-full font-sans text-gray-800">
 
             {/* HERO */}
-            <section className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center">
-                <div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                    <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-[#0D3056]">
                         Learn New Skills & Build Your Future
                     </h1>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-600 text-lg md:text-xl">
                         Explore thousands of structured courses designed by industry experts.
                     </p>
 
-                    <div className="flex gap-4">
-                        <a href="/courses" className="bg-[#0D3056] text-white px-6 py-3 rounded-lg">
+                    <div className="flex flex-wrap gap-4">
+                        <a
+                            href="/courses"
+                            className="bg-[#0D3056] text-white px-6 py-3 rounded-lg hover:bg-[#0a2642] transition"
+                        >
                             Browse Courses
                         </a>
-                        <a href="/register" className="border border-[#0D3056] text-[#0D3056] px-6 py-3 rounded-lg">
+                        <a
+                            href="/register"
+                            className="border border-[#0D3056] text-[#0D3056] px-6 py-3 rounded-lg hover:bg-[#0D3056] hover:text-white transition"
+                        >
                             Join Now
                         </a>
                     </div>
@@ -28,22 +44,22 @@ const Home = () => {
                     <img
                         src="/src/assets/hero.png"
                         alt="Hero"
-                        className="w-4/5"
+                        className="w-full max-w-md object-contain"
                     />
                 </div>
             </section>
 
             {/* CATEGORIES */}
             <section className="max-w-7xl mx-auto px-6 py-12">
-                <h2 className="text-2xl font-bold mb-6">Popular Categories</h2>
+                <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Popular Categories</h2>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {["Web Development", "Design", "Marketing", "Data Science"].map((cat, i) => (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                    {categories.map((cat, i) => (
                         <div
                             key={i}
-                            className="p-6 bg-white shadow rounded-xl text-center hover:shadow-lg transition"
+                            className="p-6 bg-white shadow-md rounded-xl text-center hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
                         >
-                            {cat}
+                            <span className="text-lg font-semibold">{cat}</span>
                         </div>
                     ))}
                 </div>
@@ -51,62 +67,81 @@ const Home = () => {
 
             {/* FEATURED COURSES */}
             <section className="max-w-7xl mx-auto px-6 py-12">
-                <h2 className="text-2xl font-bold mb-6">Popular Courses</h2>
+                <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Popular Courses</h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
-                    {[1, 2, 3, 4].map((item) => (
-                        <div key={item} className="bg-white shadow rounded-xl p-4 hover:shadow-lg transition">
-                            <div className="h-40 bg-gray-200 rounded mb-4"></div>
-                            <h3 className="font-semibold mb-1">Course Title</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    {courses.map((item) => (
+                        <div
+                            key={item}
+                            className="bg-white shadow-md rounded-xl p-4 hover:shadow-xl transition transform hover:-translate-y-1"
+                        >
+                            <div className="h-40 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                                <img
+                                    src={`https://source.unsplash.com/400x200/?coding,${item}`}
+                                    alt="Course"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <h3 className="font-semibold text-lg mb-1">Course Title</h3>
                             <p className="text-gray-500 text-sm mb-2">Instructor Name</p>
                             <p className="font-bold text-[#0D3056] mb-3">$49</p>
                             <a
                                 href="/courses/1"
-                                className="block text-center bg-[#0D3056] text-white py-2 rounded"
+                                className="block text-center bg-[#0D3056] text-white py-2 rounded-lg hover:bg-[#0a2642] transition"
                             >
                                 View Details
                             </a>
                         </div>
                     ))}
-
                 </div>
             </section>
+            {/* logo-animation */}
+            <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center bg-black rounded-xl">
 
+                {/* LEFT: Text */}
+                <div className="space-y-6 pl-10">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white">
+                        Start Learning Today
+                    </h2>
+                    <p className="text-gray-300 text-lg md:text-xl">
+                        Watch our platform come to life with our animated logo and see how easy learning can be.
+                    </p>
+                    <a
+                        href="/courses"
+                        className="bg-[#0D3056] text-white px-8 py-4 rounded-lg hover:bg-[#0a2642] transition inline-block"
+                    >
+                        Browse Courses
+                    </a>
+                </div>
+
+                {/* RIGHT: Smaller Video */}
+                <div className="w-full flex justify-center md:justify-center">
+                    <video
+                        src="/src/assets/logo-animation.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        className="w-1/2 max-w-sm rounded-lg"
+                    />
+                </div>
+            </section>
             {/* WHY CHOOSE US */}
-            <section className="bg-gray-100 py-14">
+            <section className="bg-gray-50 py-16">
                 <div className="max-w-7xl mx-auto px-6">
-                    <h2 className="text-2xl font-bold mb-8 text-center">Why Choose CourseMaster?</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center">Why Choose CourseMaster?</h2>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                        {[
-                            "Expert Instructors",
-                            "Lifetime Access",
-                            "Certification",
-                            "Affordable Price",
-                        ].map((item, i) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                        {features.map((item, i) => (
                             <div
                                 key={i}
-                                className="bg-white p-6 shadow rounded-xl text-center hover:shadow-md transition"
+                                className="bg-white p-6 shadow-md rounded-xl text-center hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
                             >
-                                <h3 className="font-semibold">{item}</h3>
+                                <h3 className="font-semibold text-lg">{item}</h3>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
-
-            {/* CTA */}
-            <section className="text-center py-16">
-                <h2 className="text-3xl font-bold mb-4">Start Learning Today</h2>
-                <a
-                    href="/courses"
-                    className="bg-[#0D3056] text-white px-8 py-3 rounded-lg"
-                >
-                    Browse Courses
-                </a>
-            </section>
-
         </div>
     );
 };
