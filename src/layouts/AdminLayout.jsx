@@ -51,7 +51,7 @@ const AdminLayout = () => {
             <div className="bg-white p-4 rounded-lg shadow-sm">
               <nav className="text-sm text-gray-600 flex items-center gap-2">
                 {crumbs.map((c, i) => (
-                  <span key={c.path} className="inline-flex items-center gap-2">
+                  <span key={`${c.path}-${i}`} className="inline-flex items-center gap-2">
                     <Link to={c.path} className="hover:underline text-gray-700">{c.label}</Link>
                     {i < crumbs.length - 1 && <span className="text-gray-400">/</span>}
                   </span>

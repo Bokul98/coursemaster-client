@@ -54,11 +54,13 @@ const AdminDashboard = () => {
     {
       label: "Enrollments",
       value: stats.enrollments,
+      // enrollment pages are course-specific; point to courses list
       link: "/admin/enrollments",
     },
     {
       label: "Assignments",
       value: stats.assignments,
+      // assignment review is per-course; point to courses list
       link: "/admin/assignments",
     },
   ];

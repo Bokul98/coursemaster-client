@@ -75,6 +75,9 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: AdminDashboard },
       { path: "courses", Component: AdminCourses },
+      { path: "batches", Component: () => <Navigate to="/admin/courses" replace /> },
+      { path: "enrollments", Component: () => <Navigate to="/admin/courses" replace /> },
+      { path: "assignments", Component: () => <Navigate to="/admin/courses" replace /> },
       { path: "courses/new", Component: AdminCourseForm },
       { path: "courses/:id", Component: AdminCourseForm },
       { path: "courses/:courseId/batches", Component: AdminBatches },
