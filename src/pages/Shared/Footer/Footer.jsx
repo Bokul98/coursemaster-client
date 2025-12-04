@@ -58,7 +58,7 @@ const Footer = () => {
                     <p className="text-sm mb-4">Stay connected regarding updates.</p>
                     <div className="flex space-x-4">
                         <a 
-                            href="https://facebook.com" 
+                            href="https://www.facebook.com/misunacademy" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-600 hover:text-white transition-all duration-300"

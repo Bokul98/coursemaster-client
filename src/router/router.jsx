@@ -8,6 +8,9 @@ import Register from "../pages/Authentication/Register/Register";
 import Courses from "../pages/Courses/Courses";
 import CourseDetails from "../pages/Courses/CourseDetails";
 import StudentDashboard from "../pages/Student/StudentDashboard";
+import StudentWatch from "../pages/Student/StudentWatch";
+import StudentAssignment from "../pages/Student/StudentAssignment";
+import StudentQuiz from "../pages/Student/StudentQuiz";
 import CoursePlayer from "../pages/Courses/CoursePlayer";
 import Assignment from "../pages/Courses/Assignment";
 import Quiz from "../pages/Courses/Quiz";
@@ -48,6 +51,18 @@ export const router = createBrowserRouter([
       if (role === 'admin') return <Navigate to="/admin" replace />;
       return <StudentDashboard />;
     }
+  },
+  {
+    path: "/student/course/:id/watch",
+    Component: StudentWatch
+  },
+  {
+    path: "/student/course/:id/assignment",
+    Component: StudentAssignment
+  },
+  {
+    path: "/student/course/:id/quiz",
+    Component: StudentQuiz
   },
   {
     path: "/admin",
