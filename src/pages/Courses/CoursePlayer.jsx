@@ -12,7 +12,7 @@ const CoursePlayer = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/courses/${id}`);
+        const res = await fetch(`https://coursemaster-ruddy.vercel.app/courses/${id}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Course not found');
         setCourse({ id: data._id, title: data.title, syllabus: data.syllabus || [] });
@@ -20,7 +20,7 @@ const CoursePlayer = () => {
         // fetch enrollment for this course
         const token = localStorage.getItem('accessToken');
         if (!token) throw new Error('Not authenticated');
-        const r2 = await fetch('http://localhost:5000/student/enrollments', { headers: { Authorization: `Bearer ${token}` } });
+        const r2 = await fetch('https://coursemaster-ruddy.vercel.app/student/enrollments', { headers: { Authorization: `Bearer ${token}` } });
         const enrollments = await r2.json();
         if (!r2.ok) throw new Error(enrollments.error || 'Failed to get enrollment');
         const e = enrollments.find(x => String(x.courseId) === String(id)) || { progress: 0, lessonsCompleted: [] };
@@ -48,7 +48,7 @@ const CoursePlayer = () => {
     setEnrollment({ lessonsCompleted: lessonsArr, progress });
 
     try {
-      const res = await fetch(`http://localhost:5000/student/enrollments/${id}/progress`, {
+      const res = await fetch(`https://coursemaster-ruddy.vercel.app/student/enrollments/${id}/progress`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ progress, lessonsCompleted: lessonsArr })

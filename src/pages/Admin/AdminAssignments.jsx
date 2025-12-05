@@ -21,7 +21,7 @@ const AdminAssignments = () => {
       setLoading(true);
       setError(null);
       try {
-        const url = courseId ? `http://localhost:5000/admin/courses/${courseId}/assignments` : `http://localhost:5000/admin/assignments`;
+        const url = courseId ? `https://coursemaster-ruddy.vercel.app/admin/courses/${courseId}/assignments` : `https://coursemaster-ruddy.vercel.app/admin/assignments`;
         const res = await fetch(url, { headers: authHeader() });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to load assignments');

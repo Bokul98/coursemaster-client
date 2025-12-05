@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router";
 import { Link } from "react-router";
+import LogoPng from '/src/assets/Logo.png';
 
 const AuthLayout = ({ children }) => {
     return (
@@ -9,7 +10,7 @@ const AuthLayout = ({ children }) => {
             {/* Logo */}
             <div className="pb-4">
                 <Link to="/">
-                <img src="/src/assets/Logo.png" alt="CourseMaster Logo" className="w-40 cursor-pointer" />
+                <img src={LogoPng} alt="CourseMaster Logo" className="w-40 cursor-pointer" />
             </Link>
             </div>
 

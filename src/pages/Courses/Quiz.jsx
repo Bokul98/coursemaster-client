@@ -58,7 +58,7 @@ const Quiz = (props) => {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/student/quizzes', {
+      const res = await fetch('https://coursemaster-ruddy.vercel.app/student/quizzes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ courseId, score: result.correct, total: result.total, moduleId: moduleId || null, lessonId: moduleId || null })

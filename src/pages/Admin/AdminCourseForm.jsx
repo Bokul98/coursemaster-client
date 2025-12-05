@@ -11,7 +11,7 @@ const AdminCourseForm = () => {
 
   useEffect(() => {
     if (id) {
-      fetch(`http://localhost:5000/admin/courses/${id}`, { headers: authHeader() })
+      fetch(`https://coursemaster-ruddy.vercel.app/admin/courses/${id}`, { headers: authHeader() })
         .then(r => r.json())
         .then(data => setForm({ ...data, syllabus: (data.syllabus || []).join('\n') }))
         .catch(() => { });
@@ -36,7 +36,7 @@ const AdminCourseForm = () => {
         reader.readAsDataURL(f);
       });
       const base64 = await toBase64(file);
-      const res = await fetch('http://localhost:5000/admin/upload-image', { method: 'POST', headers: authHeader(), body: JSON.stringify({ image: base64 }) });
+      const res = await fetch('https://coursemaster-ruddy.vercel.app/admin/upload-image', { method: 'POST', headers: authHeader(), body: JSON.stringify({ image: base64 }) });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || 'Upload failed');
       const url = body.url;
@@ -52,7 +52,7 @@ const AdminCourseForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { ...form, syllabus: form.syllabus.split('\n').map(s => s.trim()).filter(Boolean) };
-    const url = id ? `http://localhost:5000/admin/courses/${id}` : 'http://localhost:5000/admin/courses';
+    const url = id ? `https://coursemaster-ruddy.vercel.app/admin/courses/${id}` : 'https://coursemaster-ruddy.vercel.app/admin/courses';
     const method = id ? 'PATCH' : 'POST';
     setSubmitting(true);
     setErrors(null);

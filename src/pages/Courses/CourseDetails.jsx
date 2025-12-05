@@ -12,7 +12,7 @@ const CourseDetails = () => {
         const fetchCourse = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`http://localhost:5000/courses/${id}`);
+                const res = await fetch(`https://coursemaster-ruddy.vercel.app/courses/${id}`);
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Not found');
                 setCourse({
@@ -41,7 +41,7 @@ const CourseDetails = () => {
         }
 
         try {
-            const res = await fetch('http://localhost:5000/student/enroll', {
+            const res = await fetch('https://coursemaster-ruddy.vercel.app/student/enroll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

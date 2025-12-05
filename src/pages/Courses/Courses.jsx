@@ -26,7 +26,7 @@ const Courses = () => {
                 if (sort) params.set('sort', sort);
                 if (category && category !== 'all') params.set('category', category);
 
-                const res = await fetch(`http://localhost:5000/courses?${params.toString()}`);
+                const res = await fetch(`https://coursemaster-ruddy.vercel.app/courses?${params.toString()}`);
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed to load courses');
 

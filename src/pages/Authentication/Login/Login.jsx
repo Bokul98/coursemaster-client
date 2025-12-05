@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
+
 const Login = () => {
     const [serverError, setServerError] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
@@ -19,7 +20,7 @@ const Login = () => {
         setSuccessMsg("");
 
         try {
-            const response = await fetch("http://localhost:5000/auth/signin", {
+            const response = await fetch("https://coursemaster-ruddy.vercel.app/auth/signin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -32,7 +32,7 @@ const Register = () => {
         };
 
         try {
-            const res = await fetch("http://localhost:5000/auth/signup", {
+            const res = await fetch("https://coursemaster-ruddy.vercel.app/auth/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const Register = () => {
             setSuccessMsg("Account created successfully!");
             // auto-login after successful signup
             try {
-                const signinRes = await fetch("http://localhost:5000/auth/signin", {
+                const signinRes = await fetch("https://coursemaster-ruddy.vercel.app/auth/signin", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     credentials: "include",

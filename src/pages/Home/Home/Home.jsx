@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import HeroPng from '/src/assets/hero.png';
+import AnimatedVideo from '/src/assets/logo-animation.mp4';
 import { FaCode, FaPaintBrush, FaBullhorn, FaChartLine, FaChalkboardTeacher, FaCertificate, FaWallet, FaClock, FaBook } from 'react-icons/fa';
 
 const Home = () => {
-    const API = 'http://localhost:5000';
+    const API = 'https://coursemaster-ruddy.vercel.app';
     const categories = ["Web Development", "Design", "Marketing", "Data Science"];
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -68,7 +70,7 @@ const Home = () => {
 
                 <div className="hidden md:flex justify-center">
                     <img
-                        src="/src/assets/hero.png"
+                        src={HeroPng}
                         alt="Hero"
                         className="w-full max-w-md object-contain"
                     />
@@ -148,7 +150,7 @@ const Home = () => {
                 {/* RIGHT: Smaller Video */}
                 <div className="w-full flex justify-center md:justify-center">
                     <video
-                        src="/src/assets/logo-animation.mp4"
+                        src={AnimatedVideo}
                         autoPlay
                         loop
                         muted

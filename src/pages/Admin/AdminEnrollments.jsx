@@ -17,7 +17,7 @@ const AdminEnrollments = () => {
       setLoading(true);
       setError(null);
       try {
-        const url = batchId ? `http://localhost:5000/admin/batches/${batchId}/enrollments` : (courseId ? `http://localhost:5000/admin/courses/${courseId}/enrollments` : `http://localhost:5000/admin/enrollments`);
+        const url = batchId ? `https://coursemaster-ruddy.vercel.app/admin/batches/${batchId}/enrollments` : (courseId ? `https://coursemaster-ruddy.vercel.app/admin/courses/${courseId}/enrollments` : `https://coursemaster-ruddy.vercel.app/admin/enrollments`);
         const res = await fetch(url, { headers: authHeader() });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to load enrollments');

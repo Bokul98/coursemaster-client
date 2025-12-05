@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
-const API = 'http://localhost:5000';
+const API = 'https://coursemaster-ruddy.vercel.app';
 
 const getLessonsFromCourse = (course) => {
   if (!course) return [];

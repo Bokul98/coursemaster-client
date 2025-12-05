@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API = "http://localhost:5000/admin";
+const API = "https://coursemaster-ruddy.vercel.app/admin";
 
 // 🔹 Reusable fetch helper
 const fetchWithAuth = async (endpoint) => {

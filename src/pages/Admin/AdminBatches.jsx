@@ -10,7 +10,7 @@ const AdminBatches = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const url = courseId ? `http://localhost:5000/admin/courses/${courseId}/batches` : `http://localhost:5000/admin/batches`;
+        const url = courseId ? `https://coursemaster-ruddy.vercel.app/admin/courses/${courseId}/batches` : `https://coursemaster-ruddy.vercel.app/admin/batches`;
         const res = await fetch(url, { headers: authHeader() });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to load');
@@ -30,7 +30,7 @@ const AdminBatches = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/admin/courses/${courseId}/batches`, { method: 'POST', headers: authHeader(), body: JSON.stringify(form) });
+      const res = await fetch(`https://coursemaster-ruddy.vercel.app/admin/courses/${courseId}/batches`, { method: 'POST', headers: authHeader(), body: JSON.stringify(form) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to create');
       setBatches(prev => [data, ...prev]);
@@ -44,7 +44,7 @@ const AdminBatches = () => {
     if (!confirm('Delete this batch?')) return;
     try {
       // server exposes delete as DELETE /admin/batches/:id
-      const res = await fetch(`http://localhost:5000/admin/batches/${id}`, { method: 'DELETE', headers: authHeader() });
+      const res = await fetch(`https://coursemaster-ruddy.vercel.app/admin/batches/${id}`, { method: 'DELETE', headers: authHeader() });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || 'Failed to delete');
       setBatches(prev => prev.filter(b => b._id !== id));

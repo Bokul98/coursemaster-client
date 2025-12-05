@@ -17,7 +17,7 @@ const AdminCourses = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('http://localhost:5000/admin/courses', { headers: authHeader() });
+      const res = await fetch('https://coursemaster-ruddy.vercel.app/admin/courses', { headers: authHeader() });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to load courses');
       setCourses(Array.isArray(data) ? data : []);
@@ -35,7 +35,7 @@ const AdminCourses = () => {
     if (!confirm('Delete this course? This action cannot be undone.')) return;
     try {
       setDeleting(id);
-      const res = await fetch(`http://localhost:5000/admin/courses/${id}`, { method: 'DELETE', headers: authHeader() });
+      const res = await fetch(`https://coursemaster-ruddy.vercel.app/admin/courses/${id}`, { method: 'DELETE', headers: authHeader() });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || 'Failed to delete');
       setCourses(prev => prev.filter(c => c._id !== id));

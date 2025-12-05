@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "/src/assets/Logo.png";
 
-const API = "http://localhost:5000";
+const API = "https://coursemaster-ruddy.vercel.app";
 
 const tiny = (s, n = 60) => (s ? (s.length > n ? s.slice(0, n - 1) + "…" : s) : "");
 
