@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 
 const Home = () => {
+    const API = 'http://localhost:5000';
     const categories = ["Web Development", "Design", "Marketing", "Data Science"];
-    const courses = [1, 2, 3, 4];
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        let mounted = true;
+        const load = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await fetch(`${API}/courses`);
+                if (!res.ok) throw new Error('Failed to load courses');
+                const data = await res.json();
+                const items = data?.items || data || [];
+                if (mounted) setCourses(items);
+            } catch (err) {
+                if (mounted) setError(err.message || 'Could not load courses');
+            } finally {
+                if (mounted) setLoading(false);
+            }
+        };
+        load();
+        return () => { mounted = false; };
+    }, []);
 
     const features = [
         "Expert Instructors",
@@ -68,32 +93,23 @@ const Home = () => {
             {/* FEATURED COURSES */}
             <section className="max-w-7xl mx-auto px-6 py-12">
                 <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Popular Courses</h2>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    {courses.map((item) => (
-                        <div
-                            key={item}
-                            className="bg-white shadow-md rounded-xl p-4 hover:shadow-xl transition transform hover:-translate-y-1"
-                        >
-                            <div className="h-40 bg-gray-200 rounded-lg mb-4 overflow-hidden">
-                                <img
-                                    src={`https://source.unsplash.com/400x200/?coding,${item}`}
-                                    alt="Course"
-                                    className="w-full h-full object-cover"
-                                />
+                {loading && <div className="text-center text-sm text-gray-500">Loading courses…</div>}
+                {error && <div className="text-center text-sm text-red-600">{error}</div>}
+                {!loading && !error && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                        {courses.map((c) => (
+                            <div key={c._id || c.id} className="bg-white shadow-md rounded-xl p-4 hover:shadow-xl transition transform hover:-translate-y-1">
+                                <div className="h-40 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                                    <img src={c.metadata?.image || `https://source.unsplash.com/400x200/?${encodeURIComponent(c.title || 'course')}`} alt={c.title} className="w-full h-full object-cover" />
+                                </div>
+                                <h3 className="font-semibold text-lg mb-1">{c.title}</h3>
+                                <p className="text-gray-500 text-sm mb-2">{c.instructor || 'Instructor'}</p>
+                                <p className="font-bold text-[#0D3056] mb-3">{typeof c.price === 'number' ? `$${c.price}` : (c.price || 'Free')}</p>
+                                <Link to={`/courses/${c._id || c.id}`} className="block text-center bg-[#0D3056] text-white py-2 rounded-lg hover:bg-[#0a2642] transition">View Details</Link>
                             </div>
-                            <h3 className="font-semibold text-lg mb-1">Course Title</h3>
-                            <p className="text-gray-500 text-sm mb-2">Instructor Name</p>
-                            <p className="font-bold text-[#0D3056] mb-3">$49</p>
-                            <a
-                                href="/courses/1"
-                                className="block text-center bg-[#0D3056] text-white py-2 rounded-lg hover:bg-[#0a2642] transition"
-                            >
-                                View Details
-                            </a>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </section>
             {/* logo-animation */}
             <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center bg-black rounded-xl">

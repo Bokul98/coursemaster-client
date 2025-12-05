@@ -38,7 +38,8 @@ const Courses = () => {
                     price: c.price || 0,
                     category: c.category || (c.metadata?.category) || 'General',
                     syllabus: c.syllabus || [],
-                    description: c.description || c.metadata?.description || ''
+                    description: c.description || c.metadata?.description || '',
+                    image: c.metadata?.image || `https://source.unsplash.com/400x200/?${encodeURIComponent(c.title || 'course')}`
                 }));
 
                 setCourses(mapped);
@@ -84,7 +85,7 @@ const Courses = () => {
         if (page > totalPages) setPage(totalPages);
     }, [page, totalPages]);
 
-    const pageItems = courses;
+    const pageItems = filtered;
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-12">
@@ -134,7 +135,13 @@ const Courses = () => {
                         key={course.id}
                         className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition"
                     >
-                        <div className="h-40 bg-gray-200" />
+                        {course.image ? (
+                            <div className="h-40 bg-gray-200 rounded-t-lg overflow-hidden">
+                                <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+                            </div>
+                        ) : (
+                            <div className="h-40 bg-gray-200" />
+                        )}
 
                         <div className="p-4">
                             <h2 className="font-semibold text-lg mb-1">{course.title}</h2>

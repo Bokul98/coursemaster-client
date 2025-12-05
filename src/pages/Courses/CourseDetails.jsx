@@ -21,7 +21,8 @@ const CourseDetails = () => {
                     instructor: data.instructor,
                     price: data.price,
                     description: data.description || data.metadata?.description || '',
-                    syllabus: data.syllabus || []
+                    syllabus: data.syllabus || [],
+                    image: data.metadata?.image || (data.metadata?.image === '' ? '' : null)
                 });
             } catch (err) {
                 setError(err.message || 'Failed to load');
@@ -69,6 +70,12 @@ const CourseDetails = () => {
     return (
         <div className="max-w-4xl mx-auto px-6 py-12">
             <div className="bg-white shadow rounded-xl p-6">
+                {course.image ? (
+                    <div className="h-56 mb-4 overflow-hidden rounded-lg">
+                        <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+                    </div>
+                ) : null}
+
                 <h1 className="text-3xl font-bold mb-2">{course.title}</h1>
                 <p className="text-sm text-gray-500 mb-4">Instructor: {course.instructor}</p>
                 <p className="mb-4">{course.description}</p>
