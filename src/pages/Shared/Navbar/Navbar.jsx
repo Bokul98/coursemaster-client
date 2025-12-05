@@ -61,10 +61,7 @@ const Navbar = () => {
                             }} className="hover:text-blue-600 font-medium transition-colors">Logout</button>
                         </>
                     )}
-
-                    {role === 'admin' && (
-                        <Link to="/admin" className="hover:text-blue-600 font-medium transition-colors">Admin</Link>
-                    )}
+                    
                 </div>
 
                 {/* Mobile Menu Button */}
