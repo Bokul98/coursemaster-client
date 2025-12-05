@@ -21,6 +21,7 @@ import AdminCourseForm from "../pages/Admin/AdminCourseForm";
 import AdminBatches from "../pages/Admin/AdminBatches";
 import AdminEnrollments from "../pages/Admin/AdminEnrollments";
 import AdminAssignments from "../pages/Admin/AdminAssignments";
+import NotFound from "../pages/Shared/NotFound/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -110,5 +111,10 @@ export const router = createBrowserRouter([
         Component: Register
       }
     ]
+  }
+  ,
+  {
+    path: "*",
+    Component: NotFound
   }
 ]);

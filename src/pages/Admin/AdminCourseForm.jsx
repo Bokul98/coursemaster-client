@@ -14,7 +14,7 @@ const AdminCourseForm = () => {
       fetch(`http://localhost:5000/admin/courses/${id}`, { headers: authHeader() })
         .then(r => r.json())
         .then(data => setForm({ ...data, syllabus: (data.syllabus || []).join('\n') }))
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [id]);
 
@@ -72,51 +72,101 @@ const AdminCourseForm = () => {
   const [errors, setErrors] = React.useState(null);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow space-y-4">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-lg space-y-6">
         {errors && <div className="text-sm text-red-600">{errors}</div>}
+
         <label className="block">
-          <div className="text-sm font-medium mb-1">Title</div>
-          <input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Title" className="w-full border rounded px-3 py-2" />
+          <div className="text-sm font-semibold mb-2 text-gray-700">Title</div>
+          <input
+            value={form.title}
+            onChange={e => setForm({ ...form, title: e.target.value })}
+            placeholder="Course Title"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+          />
         </label>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className="block">
-            <div className="text-sm font-medium mb-1">Instructor</div>
-            <input value={form.instructor} onChange={e => setForm({ ...form, instructor: e.target.value })} placeholder="Instructor" className="w-full border rounded px-3 py-2" />
+            <div className="text-sm font-semibold mb-2 text-gray-700">Instructor</div>
+            <input
+              value={form.instructor}
+              onChange={e => setForm({ ...form, instructor: e.target.value })}
+              placeholder="Instructor Name"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+            />
           </label>
 
           <label className="block">
-            <div className="text-sm font-medium mb-1">Price</div>
-            <input value={form.price} onChange={e => setForm({ ...form, price: Number(e.target.value) })} placeholder="Price" type="number" className="w-full border rounded px-3 py-2" />
+            <div className="text-sm font-semibold mb-2 text-gray-700">Price</div>
+            <input
+              value={form.price}
+              onChange={e => setForm({ ...form, price: Number(e.target.value) })}
+              placeholder="Price"
+              type="number"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+            />
           </label>
         </div>
 
         <label className="block">
-          <div className="text-sm font-medium mb-1">Description</div>
-          <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Description" className="w-full border rounded px-3 py-2" />
+          <div className="text-sm font-semibold mb-2 text-gray-700">Description</div>
+          <textarea
+            value={form.description}
+            onChange={e => setForm({ ...form, description: e.target.value })}
+            placeholder="Course Description"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+            rows={4}
+          />
         </label>
 
         <label className="block">
-          <div className="text-sm font-medium mb-1">Syllabus (one item per line)</div>
-          <textarea value={form.syllabus} onChange={e => setForm({ ...form, syllabus: e.target.value })} placeholder="Syllabus (one item per line)" className="w-full border rounded px-3 py-2" />
+          <div className="text-sm font-semibold mb-2 text-gray-700">Syllabus (one item per line)</div>
+          <textarea
+            value={form.syllabus}
+            onChange={e => setForm({ ...form, syllabus: e.target.value })}
+            placeholder="Enter syllabus items..."
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+            rows={4}
+          />
         </label>
 
         <label className="block">
-          <div className="text-sm font-medium mb-1">Course Image</div>
+          <div className="text-sm font-semibold mb-2 text-gray-700">Course Image</div>
           {form.metadata?.image && (
-            <div className="mb-2">
-              <img src={form.metadata.image} alt="preview" className="h-28 rounded object-cover" />
+            <div className="mb-3">
+              <img
+                src={form.metadata.image}
+                alt="Preview"
+                className="w-full sm:w-64 h-36 sm:h-40 object-cover rounded-lg shadow-sm"
+              />
             </div>
           )}
-          <input type="file" accept="image/*" onChange={e => handleImageFile(e.target.files?.[0])} />
-          {uploadingImage && <div className="text-sm text-gray-500">Uploading…</div>}
-          {imageError && <div className="text-sm text-red-600">{imageError}</div>}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => handleImageFile(e.target.files?.[0])}
+            className="text-sm text-gray-600"
+          />
+          {uploadingImage && <div className="text-sm text-gray-500 mt-1">Uploading…</div>}
+          {imageError && <div className="text-sm text-red-600 mt-1">{imageError}</div>}
         </label>
 
-        <div className="flex gap-2">
-          <button type="submit" disabled={submitting} className="px-4 py-2 bg-[#0D3056] text-white rounded">{submitting ? 'Saving…' : 'Save'}</button>
-          <button type="button" onClick={() => navigate(-1)} className="px-4 py-2 border rounded">Cancel</button>
+        <div className="flex flex-col sm:flex-row gap-3 mt-4">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="flex-1 px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg shadow hover:from-blue-700 hover:to-blue-600 transition"
+          >
+            {submitting ? 'Saving…' : 'Save'}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="flex-1 px-5 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>
