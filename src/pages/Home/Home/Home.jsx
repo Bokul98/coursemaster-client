@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import { FaCode, FaPaintBrush, FaBullhorn, FaChartLine, FaChalkboardTeacher, FaCertificate, FaWallet, FaClock, FaBook } from 'react-icons/fa';
 
 const Home = () => {
     const API = 'http://localhost:5000';
@@ -30,10 +31,10 @@ const Home = () => {
     }, []);
 
     const features = [
-        "Expert Instructors",
-        "Lifetime Access",
-        "Certification",
-        "Affordable Price",
+        { title: "Expert Instructors", desc: "Courses built and taught by industry pros.", icon: FaChalkboardTeacher },
+        { title: "Lifetime Access", desc: "Learn at your pace with lifetime course access.", icon: FaClock },
+        { title: "Certification", desc: "Get certificates to showcase your skills.", icon: FaCertificate },
+        { title: "Affordable Price", desc: "High-quality learning at student-friendly prices.", icon: FaWallet },
     ];
 
     return (
@@ -79,14 +80,28 @@ const Home = () => {
                 <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Popular Categories</h2>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                    {categories.map((cat, i) => (
-                        <div
-                            key={i}
-                            className="p-6 bg-white shadow-md rounded-xl text-center hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
-                        >
-                            <span className="text-lg font-semibold">{cat}</span>
-                        </div>
-                    ))}
+                    {categories.map((cat, i) => {
+                        const categoryIcons = {
+                            'Web Development': FaCode,
+                            'Design': FaPaintBrush,
+                            'Marketing': FaBullhorn,
+                            'Data Science': FaChartLine,
+                        };
+                        const CatIcon = categoryIcons[cat] || FaBook;
+                        return (
+                            <Link
+                                key={i}
+                                to={`/courses?category=${encodeURIComponent(cat)}`}
+                                className="group p-6 bg-white shadow-md rounded-xl text-center hover:shadow-xl transition duration-300 transform hover:-translate-y-1 flex flex-col items-center gap-3"
+                            >
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#0D3056] to-[#3b82f6] flex items-center justify-center text-white text-lg font-bold">
+                                    <CatIcon className="w-8 h-8" />
+                                </div>
+                                <span className="text-lg font-semibold">{cat}</span>
+                                <span className="text-sm text-gray-500">Explore {cat} courses</span>
+                            </Link>
+                        );
+                    })}
                 </div>
             </section>
 
@@ -147,14 +162,19 @@ const Home = () => {
                     <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center">Why Choose CourseMaster?</h2>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-                        {features.map((item, i) => (
-                            <div
-                                key={i}
-                                className="bg-white p-6 shadow-md rounded-xl text-center hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
-                            >
-                                <h3 className="font-semibold text-lg">{item}</h3>
-                            </div>
-                        ))}
+                        {features.map((item, i) => {
+                            const Icon = item.icon;
+                            return (
+                                <div
+                                    key={i}
+                                    className="bg-white p-6 shadow-md rounded-xl text-center hover:shadow-xl transition duration-300 transform hover:-translate-y-1 flex flex-col items-center gap-4"
+                                >
+                                    <Icon className="text-4xl text-[#0D3056]" />
+                                    <h3 className="font-semibold text-lg">{item.title}</h3>
+                                    <p className="text-sm text-gray-500">{item.desc}</p>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
