@@ -17,7 +17,8 @@ const AdminAssignments = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:5000/admin/courses/${courseId}/assignments`, { headers: authHeader() });
+        const url = courseId ? `http://localhost:5000/admin/courses/${courseId}/assignments` : `http://localhost:5000/admin/assignments`;
+        const res = await fetch(url, { headers: authHeader() });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to load assignments');
         setAssignments(Array.isArray(data) ? data : []);

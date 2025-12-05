@@ -17,7 +17,7 @@ const AdminEnrollments = () => {
       setLoading(true);
       setError(null);
       try {
-        const url = batchId ? `http://localhost:5000/admin/batches/${batchId}/enrollments` : `http://localhost:5000/admin/courses/${courseId}/enrollments`;
+        const url = batchId ? `http://localhost:5000/admin/batches/${batchId}/enrollments` : (courseId ? `http://localhost:5000/admin/courses/${courseId}/enrollments` : `http://localhost:5000/admin/enrollments`);
         const res = await fetch(url, { headers: authHeader() });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to load enrollments');
