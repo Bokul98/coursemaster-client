@@ -1,16 +1,30 @@
-# React + Vite
+# CourseMaster (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Short overview
+- Frontend: React + Vite
+- API: https://coursemaster-ruddy.vercel.app (used by the app for auth, courses, admin endpoints)
 
-Currently, two official plugins are available:
+Quick setup
+1. Install dependencies:
+   npm install
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. Run development server:
+   npm run dev
 
-## React Compiler
+3. Build for production:
+   npm run build
+   npm run preview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Admin login (local shortcut)
+- A local admin shortcut has been added to the login form. For local testing you can log in as admin without the backend by using:
+  - Email: bokulsorkar96@gmail.com
+  - Password: bokulsorkar96@gmail.com
+- This sets a local dummy token and `userRole = "admin"` in localStorage and navigates to the admin area.
 
-## Expanding the ESLint configuration
+Files to check
+- Login component (local admin shortcut): [`Login`](src/pages/Authentication/Login/Login.jsx)
+- Router entry and admin layout: see [`src/router/router.jsx`](src/router/router.jsx) and [`AdminLayout`](src/layouts/AdminLayout.jsx)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Notes
+- The local admin shortcut is intended for local development/testing only. Remove it before deploying to production.
+- The app still performs real backend signin for other credentials.
