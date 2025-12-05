@@ -33,39 +33,61 @@ const AdminEnrollments = () => {
   }, [courseId, batchId]);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 py-12 space-y-6">
+      {loading && (
+        <div className="p-6 bg-white rounded-2xl shadow-md text-gray-600 font-medium">
+          Loading enrollments…
+        </div>
+      )}
 
-      {loading && <div className="p-6 bg-white rounded shadow">Loading enrollments…</div>}
-      {error && <div className="p-4 bg-red-50 text-red-700 rounded mb-4">{error}</div>}
+      {error && (
+        <div className="p-4 bg-red-50 text-red-700 rounded-lg shadow-sm">
+          {error}
+        </div>
+      )}
 
       {!loading && !error && (
-        <div className="bg-white rounded shadow overflow-auto">
-          <table className="min-w-full table-auto">
+        <div className="bg-white rounded-2xl shadow overflow-x-auto">
+          <table className="min-w-full table-auto divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Student</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Contact</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Progress</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Batch</th>
-                <th className="px-4 py-3 text-center text-sm font-medium text-gray-600">Enrolled At</th>
-                <th className="px-4 py-3 text-center text-sm font-medium text-gray-600">Actions</th>
+                {['Student', 'Contact', 'Progress', 'Batch', 'Enrolled At', 'Actions'].map((h) => (
+                  <th
+                    key={h}
+                    className="px-6 py-3 text-left text-sm font-semibold text-gray-600"
+                  >
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y">
-              {enrollments.map(e => (
-                <tr key={e._id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <div className="font-semibold">{e.user?.name || e.userId}</div>
+            <tbody className="bg-white divide-y divide-gray-100">
+              {enrollments.map((e) => (
+                <tr
+                  key={e._id}
+                  className="hover:bg-gray-50 transition-colors duration-150"
+                >
+                  <td className="px-6 py-4">
+                    <div className="font-semibold text-gray-900">{e.user?.name || e.userId}</div>
                     <div className="text-sm text-gray-500">ID: {e.user?._id || e.userId}</div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{e.user?.email || '—'}<br/>{e.user?.phone || ''}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{e.progress ?? 0}%</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{e.batchId || '—'}</td>
-                  <td className="px-4 py-3 text-sm text-gray-500 text-center">{new Date(e.createdAt).toLocaleString()}</td>
-                  <td className="px-4 py-3 text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Link to={`/admin/users/${e.user?._id || e.userId}/assignments`} className="px-3 py-1 border rounded text-sm">Assignments</Link>
-                    </div>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {e.user?.email || '—'}
+                    <br />
+                    {e.user?.phone || '—'}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">{e.progress ?? 0}%</td>
+                  <td className="px-6 py-4 text-sm text-gray-700">{e.batchId || '—'}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500 text-center">
+                    {new Date(e.createdAt).toLocaleString()}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <Link
+                      to={`/admin/users/${e.user?._id || e.userId}/assignments`}
+                      className="px-3 py-1 border rounded-md text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      Assignments
+                    </Link>
                   </td>
                 </tr>
               ))}
