@@ -83,6 +83,9 @@ const AdminDashboard = () => {
           <Btn to="/admin/courses" className="bg-white border">
             Manage Courses
           </Btn>
+          <Btn to="/admin/analytics" className="bg-indigo-600 text-white">
+            Analytics
+          </Btn>
         </div>
       </div>
 

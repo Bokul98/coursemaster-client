@@ -21,6 +21,7 @@ import AdminCourseForm from "../pages/Admin/AdminCourseForm";
 import AdminBatches from "../pages/Admin/AdminBatches";
 import AdminEnrollments from "../pages/Admin/AdminEnrollments";
 import AdminAssignments from "../pages/Admin/AdminAssignments";
+import AdminAnalytics from "../pages/Admin/AdminAnalytics";
 import NotFound from "../pages/Shared/NotFound/NotFound";
 
 export const router = createBrowserRouter([
@@ -75,6 +76,7 @@ export const router = createBrowserRouter([
     },
     children: [
       { index: true, Component: AdminDashboard },
+    { path: "analytics", Component: AdminAnalytics },
       { path: "courses", Component: AdminCourses },
       // Shallow admin list pages (global views)
       { path: "batches", Component: AdminBatches },
